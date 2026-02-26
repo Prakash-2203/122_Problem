@@ -1,0 +1,165 @@
+Product of Array Except Self
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Hint
+Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+
+The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+
+You must write an algorithm that runs in O(n) time and without using the division operation.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,4]
+Output: [24,12,8,6]
+Example 2:
+
+Input: nums = [-1,1,0,-3,3]
+Output: [0,0,9,0,0]
+ 
+
+Constraints:
+
+2 <= nums.length <= 105
+-30 <= nums[i] <= 30
+The input is generated such that answer[i] is guaranteed to fit in a 32-bit integer.
+
+
+
+Brute::
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+
+    int [] arr = new int [nums.length];
+
+    for(int i = 0;i<nums.length;i++){
+        int prod = 1;
+        for(int j = 0;j<nums.length;j++){
+          
+           if(i==j) {
+            continue;
+           }
+           else{
+            prod*=nums[j];
+           }
+           
+
+
+        }
+        arr[i] = prod;
+    }
+    
+
+        return arr;
+    }
+}
+
+
+Better::
+
+
+Better Approach (Using Extra Left & Right Arrays)
+💡 Idea
+
+For every index i:
+
+answer[i] = product of all left elements × product of all right elements
+
+Instead of recalculating every time, we precompute:
+
+left[i] → product of elements before i
+
+right[i] → product of elements after i
+
+🔎 Example
+nums = [1,2,3,4]
+Step 1: Build Left array
+left[0] = 1
+left[1] = 1
+left[2] = 1×2 = 2
+left[3] = 1×2×3 = 6
+
+left = [1,1,2,6]
+Step 2: Build Right array
+right[3] = 1
+right[2] = 4
+right[1] = 4×3 = 12
+right[0] = 4×3×2 = 24
+
+right = [24,12,4,1]
+Step 3: Multiply
+result[i] = left[i] × right[i]
+ 
+class Main {
+    public static void main(String[] args) {
+        System.out.println("Try programiz.pro");
+        
+       int arr [] = {3,9,5,6,5};
+       int left [] = new int [arr.length];
+       int right [] = new int [arr.length];
+       
+        left[0] = 1;
+       for(int i = 1;i<arr.length;i++){
+         left[i] = left[i-1]*arr[i-1];
+           
+       }
+        right[arr.length-1] = 1;
+       
+       for(int i = arr.length-2;i>=0;i--){
+           right[i] = right[i+1]*arr[i+1];
+           
+       }
+       int res [] = new int [arr.length];
+       
+       for(int i=0;i<arr.length;i++){
+           res[i] = left[i]*right[i];
+           
+       }
+      
+      System.out.println(Arrays.toString(res));
+     
+       
+        
+        
+    }
+}
+
+
+Optimal::::
+
+
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+
+       int left [] = new int [nums.length];
+
+       
+        left[0] = 1;
+
+       for(int i = 1;i<nums.length;i++){
+         left[i] = left[i-1]*nums[i-1];
+           
+         }
+
+       int res [] = new int [nums.length];
+       int right = 1;
+
+       for(int i = nums.length-1;i>=0;i--){
+           res[i] = left[i]*right;
+           right = right*nums[i];
+           
+       }
+
+        return res;
+    }
+}
+
+//
+
